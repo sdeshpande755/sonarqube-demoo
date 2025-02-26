@@ -5,7 +5,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'app')))
 
 # Now import functions from main.py
-from main import add, subtract  
+from main import add, subtract, multiply, division  
 
 import unittest
 
