@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_URL = 'http://localhost:9000'
+        SONARQUBE_URL = 'http://localhost:9000'  // Change if hosted elsewhere
     }
 
     stages {
@@ -15,10 +15,10 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    def scannerHome = tool 'SonarQube Scanner'  // Ensure it's configured in Jenkins
+                    def scannerHome = tool name: 'SonarQube Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
 
-                    withSonarQubeEnv('SonarQube') {  // Ensure this matches Jenkins' SonarQube config
-                        withCredentials([string(credentialsId: 'sqp_3552fa2fbc844a05199a16e45a6b0ce8fbb42e20', variable: 'SONARQUBE_TOKEN')]) {
+                    withSonarQubeEnv('SonarQube') {  // Ensure this matches Jenkins SonarQube config
+                        withCredentials([string(credentialsId: 'sqp_75b608ef143e3c1a877cc35877bf7a938585f5cb', variable: 'SONARQUBE_TOKEN')]) {
                             sh """
                                 ${scannerHome}/bin/sonar-scanner \
                                 -Dsonar.projectKey=python-sonarqube \
