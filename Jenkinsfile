@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE = 'SonarQubeServer'
+        SONARQUBE = 'SonarQubeServer'  // Ensure this is correctly set up in Jenkins
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'feature/sonarqube-setup', url: https://github.com/sdeshpande755/sonarqube-demoo.git
+                git branch: 'feature/sonarqube-setup', url: 'https://github.com/sdeshpande755/sonarqube-demoo.git'
             }
         }
 
