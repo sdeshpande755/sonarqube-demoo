@@ -18,10 +18,10 @@ pipeline {
                     withSonarQubeEnv('SonarQubeServer') {
                         sh '''
                         sonar-scanner \
-                          -Dsonar.projectKey=sonarqube-demo \
+                          -Dsonar.projectKey=sonarqube-Demoo \
                           -Dsonar.sources=. \
                           -Dsonar.host.url=http://localhost:9000 \
-                          -Dsonar.login=sqp_2691f027ea2f89f15bcfccf11ff8c942bd7d2d13
+                          -Dsonar.login=sqp_3a2c0eb1ab3f36d4d1ff6811cbf5e27575c54d07
                         '''
                     }
                 }
