@@ -21,7 +21,7 @@ pipeline {
                         withCredentials([string(credentialsId: 'sqp_4dbe0f67f17781a8b83eb8cc0eef5c593358fa0a', variable: 'SONARQUBE_TOKEN')]) {
                             sh """
                                 ${scannerHome}/bin/sonar-scanner \\
-                                -Dsonar.projectKey=github-jenkins-sonar \\
+                                -Dsonar.projectKey=Sonar_Token \\
                                 -Dsonar.sources=. \\
                                 -Dsonar.host.url=${SONARQUBE_URL} \\
                                 -Dsonar.login=${SONARQUBE_TOKEN}

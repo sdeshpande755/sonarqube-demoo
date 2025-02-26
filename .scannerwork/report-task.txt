@@ -1,6 +1,6 @@
-projectKey=github-jenkins-sonar
+projectKey=Sonar_Token
 serverUrl=http://localhost:9000
 serverVersion=25.2.0.102705
-dashboardUrl=http://localhost:9000/dashboard?id=github-jenkins-sonar
-ceTaskId=e9267be1-80b1-4e1c-9485-68b1bb812847
-ceTaskUrl=http://localhost:9000/api/ce/task?id=e9267be1-80b1-4e1c-9485-68b1bb812847
+dashboardUrl=http://localhost:9000/dashboard?id=Sonar_Token
+ceTaskId=904b5265-2a70-4b38-8f25-aba402fba540
+ceTaskUrl=http://localhost:9000/api/ce/task?id=904b5265-2a70-4b38-8f25-aba402fba540
