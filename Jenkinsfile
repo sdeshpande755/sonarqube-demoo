@@ -2,27 +2,30 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE = 'SonarQubeServer'  // Ensure this is correctly set up in Jenkins
+        SONARQUBE_URL = 'http://localhost:9000'
+        SONARQUBE_TOKEN = credentials('sqp_b8e930ecb3f10adb6a6d8518bc2716ec5135b7b3')  // Use the correct Jenkins credential ID
     }
 
     stages {
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                git branch: 'feature/sonarqube-setup', url: 'https://github.com/sdeshpande755/sonarqube-demoo.git'
+                git branch: 'develop', url: 'https://github.com/sdeshpande755/sonarqube-demoo.git'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv('SonarQubeServer') {
-                        sh '''
-                        sonar-scanner \
-                          -Dsonar.projectKey=sonarqube-Demoo \
-                          -Dsonar.sources=. \
-                          -Dsonar.host.url=http://localhost:9000 \
-                          -Dsonar.login=sqp_3a2c0eb1ab3f36d4d1ff6811cbf5e27575c54d07
-                        '''
+                    def scannerHome = tool 'SonarQube Scanner'  // Ensure it's configured in Jenkins
+
+                    withSonarQubeEnv('SonarQube') {  // Ensure this matches Jenkins' SonarQube config
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=python-sonarqube \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=${SONARQUBE_URL} \
+                            -Dsonar.login=${SONARQUBE_TOKEN}
+                        """
                     }
                 }
             }
@@ -30,21 +33,10 @@ pipeline {
 
         stage('Quality Gate') {
             steps {
-                script {
-                    timeout(time: 1, unit: 'MINUTES') {
-                        def qg = waitForQualityGate()
-                        if (qg.status != 'OK') {
-                            error "Pipeline failed due to quality gate failure: ${qg.status}"
-                        }
-                    }
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
-        }
-    }
-
-    post {
-        failure {
-            echo "Build failed. Check SonarQube report."
         }
     }
 }
