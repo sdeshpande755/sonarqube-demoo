@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SONARQUBE_URL = 'http://localhost:9000'
-        SONARQUBE_TOKEN = credentials('sqp_b8e930ecb3f10adb6a6d8518bc2716ec5135b7b3')  // Use the correct Jenkins credential ID
+        SONARQUBE_TOKEN = credentials('sqp_3552fa2fbc844a05199a16e45a6b0ce8fbb42e20')  // Use the correct Jenkins credential ID
     }
 
     stages {
