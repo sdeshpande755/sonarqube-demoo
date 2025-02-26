@@ -18,7 +18,7 @@ pipeline {
                     def scannerHome = tool 'SonarQube Scanner'  // Ensure this is configured in Jenkins
 
                     withSonarQubeEnv('SonarQube_server') {  // Change this to match your Jenkins SonarQube config
-                        withCredentials([string(credentialsId: 'sqp_4dbe0f67f17781a8b83eb8cc0eef5c593358fa0a', variable: 'SONARQUBE_TOKEN')]) {
+                        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONARQUBE_TOKEN')]) {  // Update with correct credentials ID
                             sh """
                                 ${scannerHome}/bin/sonar-scanner \\
                                 -Dsonar.projectKey=Sonar_Token \\
