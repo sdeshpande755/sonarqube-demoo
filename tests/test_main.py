@@ -17,5 +17,11 @@ class TestMain(unittest.TestCase):
     def test_subtract(self):
         self.assertEqual(subtract(5, 2), 3)
 
+    def test_multiply(self):
+        self.assertEqual(multiply(2, 3), 6)
+
+    def test_division(self):
+        self.assertEqual(division(10, 5), 2)
+
 if __name__ == '__main__':
     unittest.main()
