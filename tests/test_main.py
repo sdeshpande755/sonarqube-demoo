@@ -1,5 +1,5 @@
 import unittest
-from my_math import add  # Importing only `add` function
+from my_math import add  # Only testing `add`
 
 class TestMathOperations(unittest.TestCase):
     def test_add(self):
