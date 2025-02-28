@@ -25,6 +25,7 @@ pipeline {
                                 -Dsonar.sources=. \\
                                 -Dsonar.host.url=${SONARQUBE_URL} \\
                                 -Dsonar.login=${SONARQUBE_TOKEN}
+                                -Dsonar.branch.name=dev
                             """
                         }
                     }
