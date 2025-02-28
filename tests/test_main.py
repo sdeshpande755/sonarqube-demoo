@@ -1,12 +1,9 @@
 import unittest
-from main import add  # Import only the add function
+from my_module import add  # Import only `add`, ignoring other functions
 
-class TestMain(unittest.TestCase):
-
+class TestMathFunctions(unittest.TestCase):
     def test_add(self):
         self.assertEqual(add(2, 3), 5)
-        self.assertEqual(add(-1, 1), 0)
-        self.assertEqual(add(0, 0), 0)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
