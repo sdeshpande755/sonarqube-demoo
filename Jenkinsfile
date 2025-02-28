@@ -30,7 +30,7 @@ pipeline {
                             withCredentials([string(credentialsId: 'testing', variable: 'SONARQUBE_TOKEN')]) {
                                 sh """
                                     ${scannerHome}/bin/sonar-scanner \\
-                                    -Dsonar.projectKey=testing \\
+                                    -Dsonar.projectKey=INVALID_PROJECT_KEY \\
                                     -Dsonar.sources=. \\
                                     -Dsonar.host.url=${SONARQUBE_URL} \\
                                     -Dsonar.login=${SONARQUBE_TOKEN}
@@ -40,7 +40,7 @@ pipeline {
                         echo "SonarQube analysis completed successfully!"
                     } catch (Exception e) {
                         currentBuild.result = 'FAILURE'
-                        error "SonarQube analysis failed: ${e.message}"
+                        error "SonarQube analysis failed (Intentional Failure): ${e.message}"
                     }
                 }
             }
