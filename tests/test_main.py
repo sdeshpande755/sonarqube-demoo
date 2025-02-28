@@ -1,5 +1,5 @@
 import unittest
-from my_math import add  # Only testing `add`
+from my_math import add  # Only testing `add`, ignoring others
 
 class TestMathOperations(unittest.TestCase):
     def test_add(self):
