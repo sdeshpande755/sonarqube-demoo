@@ -1,43 +1,46 @@
 pipeline {
-    agent any
+    agent any  // Runs on any available agent
 
     environment {
-        SONARQUBE_URL = 'http://localhost:9000'
+        SONARQUBE_URL = 'http://localhost:9000'  // Update if needed
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'dev', url: 'https://github.com/sdeshpande755/sonarqube-demoo.git'
-            }
-        }
-
-        stage('Run Tests & Generate Coverage') {
-            steps {
-                sh '''
-                    pip install coverage  # Ensure coverage is installed
-                    coverage run -m unittest discover
-                    coverage xml -o coverage.xml
-                '''
+                script {
+                    try {
+                        git branch: 'dev', url: 'https://github.com/sdeshpande755/sonarqube-demoo.git'
+                        echo "Checkout successful!"
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        error "Checkout failed: ${e.message}"
+                    }
+                }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    def scannerHome = tool 'SonarQube Scanner'
+                    try {
+                        def scannerHome = tool 'SonarQube Scanner'  // Ensure this is configured in Jenkins
 
-                    withSonarQubeEnv('SonarQube_server') {
-                        withCredentials([string(credentialsId: 'testing', variable: 'SONARQUBE_TOKEN')]) {
-                            sh """
-                                ${scannerHome}/bin/sonar-scanner \\
-                                -Dsonar.projectKey=testing \\
-                                -Dsonar.sources=. \\
-                                -Dsonar.host.url=${SONARQUBE_URL} \\
-                                -Dsonar.login=${SONARQUBE_TOKEN} \\
-                                -Dsonar.python.coverage.reportPaths=coverage.xml
-                            """
+                        withSonarQubeEnv('SonarQube_server') {  // Change this to match your Jenkins SonarQube config
+                            withCredentials([string(credentialsId: 'testing', variable: 'SONARQUBE_TOKEN')]) {
+                                sh """
+                                    ${scannerHome}/bin/sonar-scanner \\
+                                    -Dsonar.projectKey=testing \\
+                                    -Dsonar.sources=. \\
+                                    -Dsonar.host.url=${SONARQUBE_URL} \\
+                                    -Dsonar.login=${SONARQUBE_TOKEN}
+                                """
+                            }
                         }
+                        echo "SonarQube analysis completed successfully!"
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        error "SonarQube analysis failed: ${e.message}"
                     }
                 }
             }
@@ -46,11 +49,18 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script {
-                    timeout(time: 5, unit: 'MINUTES') {
-                        def qualityGate = waitForQualityGate()
-                        if (qualityGate.status != 'OK') {
-                            error "❌ Pipeline failed due to Quality Gate: ${qualityGate.status}"
+                    try {
+                        timeout(time: 5, unit: 'MINUTES') {
+                            def qualityGate = waitForQualityGate()
+                            if (qualityGate.status != 'OK') {
+                                currentBuild.result = 'FAILURE'
+                                error "Pipeline failed due to Quality Gate: ${qualityGate.status}"
+                            }
                         }
+                        echo "Quality Gate passed successfully!"
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        error "Quality Gate check failed: ${e.message}"
                     }
                 }
             }
@@ -59,10 +69,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Pipeline completed successfully!"
+            echo "✅ Pipeline execution completed successfully!"
         }
         failure {
-            echo "❌ Pipeline failed! Check logs & SonarQube for details."
+            echo "❌ Pipeline execution failed! Check logs for details."
         }
     }
 }
