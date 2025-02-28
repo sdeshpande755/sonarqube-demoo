@@ -11,7 +11,7 @@ pipeline {
                 script {
                     try {
                         // Deliberately using an incorrect repo URL to cause failure
-                        git branch: 'dev', url: 'https://github.com/sdeshpande755/non-existent-repo.git'
+                        git branch: 'dev', url: 'https://github.com/sdeshpande755/sonarqube-demoo.git'
                         echo "Checkout successful!"
                     } catch (Exception e) {
                         currentBuild.result = 'FAILURE'
