@@ -30,7 +30,7 @@ pipeline {
                             withCredentials([string(credentialsId: 'testing', variable: 'SONARQUBE_TOKEN')]) {
                                 sh """
                                     ${scannerHome}/bin/sonar-scanner \\
-                                    -Dsonar.projectKey=INVALID_PROJECT_KEY \\
+                                    -Dsonar.projectKey=testing\\
                                     -Dsonar.sources=. \\
                                     -Dsonar.host.url=${SONARQUBE_URL} \\
                                     -Dsonar.login=${SONARQUBE_TOKEN}
