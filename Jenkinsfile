@@ -10,7 +10,8 @@ pipeline {
             steps {
                 script {
                     try {
-                        git branch: 'dev', url: 'https://github.com/sdeshpande755/sonarqube-demoo.git'
+                        // Deliberately using an incorrect repo URL to cause failure
+                        git branch: 'dev', url: 'https://github.com/sdeshpande755/non-existent-repo.git'
                         echo "Checkout successful!"
                     } catch (Exception e) {
                         currentBuild.result = 'FAILURE'
@@ -21,12 +22,15 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
+            when {
+                expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
+            }
             steps {
                 script {
                     try {
-                        def scannerHome = tool 'SonarQube Scanner'  // Ensure this is configured in Jenkins
+                        def scannerHome = tool 'SonarQube Scanner'
 
-                        withSonarQubeEnv('SonarQube_server') {  // Change this to match your Jenkins SonarQube config
+                        withSonarQubeEnv('SonarQube_server') {
                             withCredentials([string(credentialsId: 'testing', variable: 'SONARQUBE_TOKEN')]) {
                                 sh """
                                     ${scannerHome}/bin/sonar-scanner \\
@@ -47,6 +51,9 @@ pipeline {
         }
 
         stage('Quality Gate') {
+            when {
+                expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
+            }
             steps {
                 script {
                     try {
