@@ -10,7 +10,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        git branch: 'dev', url: 'https://github.com/sdeshpande755/sonarqube-demoo.git'
+                        git branch: 'invalid_branch', url: 'https://github.com/sdeshpande755/sonarqube-demoo.git'
                     } catch (Exception e) {
                         error "Checkout failed: ${e.message}"
                     }
