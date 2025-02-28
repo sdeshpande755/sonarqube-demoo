@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'feature/sonarqube-setup', url: 'https://github.com/sdeshpande755/sonarqube-demoo.git'
+                git branch: 'dev', url: 'https://github.com/sdeshpande755/sonarqube-demoo.git'
             }
         }
 
@@ -41,3 +41,5 @@ pipeline {
         }
     }
 }
+
+
