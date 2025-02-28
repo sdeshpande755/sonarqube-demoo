@@ -1,24 +1,32 @@
 pipeline {
-    agent any  // Runs on any available agent
+    agent any  
 
     environment {
-        SONARQUBE_URL = 'http://localhost:9000'  // Update if needed
+        SONARQUBE_URL = 'http://localhost:9000'  
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'dev', url: 'https://github.com/sdeshpande755/sonarqube-demoo.git'
+                script {
+                    def branchName = env.BRANCH_NAME
+                    echo "Current branch: ${branchName}"
+
+                    if (branchName == 'dev' || branchName.startsWith('PR-')) {  
+                        git branch: 'dev', url: 'https://github.com/sdeshpande755/sonarqube-demoo.git'
+                    } else {
+                        error "Build aborted: Only 'dev' branch and PRs targeting 'dev' are allowed."
+                    }
+                }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    def scannerHome = tool 'SonarQube Scanner'  // Ensure this is configured in Jenkins
-
-                    withSonarQubeEnv('SonarQube_server') {  // Change this to match your Jenkins SonarQube config
-                        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONARQUBE_TOKEN')]) {  // Update with correct credentials ID
+                    def scannerHome = tool 'SonarQube Scanner'  
+                    withSonarQubeEnv('SonarQube_server') {  
+                        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONARQUBE_TOKEN')]) {  
                             sh """
                                 ${scannerHome}/bin/sonar-scanner \\
                                 -Dsonar.projectKey=Sonar_Token \\
